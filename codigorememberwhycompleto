@@ -1,0 +1,3627 @@
+CLASSE Login1.java
+
+package gui;
+
+import java.sql.*;
+import java.util.Base64;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
+/**
+ * #Rodrigo de Lima Bispo
+ *
+ * #Login.java
+ */
+public class Login1 extends javax.swing.JFrame {
+
+    public Login1() {
+        initComponents();
+
+    }
+
+    public void acessarSistema() throws SQLException {
+
+        // Condição Se para verificar se campo de texto "EMAIL" foi preenchido 
+        if (tfemail.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "O campo 'EMAIL' está vazio!");
+            return;
+        }
+
+        // Condição Se para verificar se campo de texto "SENHA" foi preenchido 
+        if (tfsenha.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "O campo 'SENHA' está vazio!");
+            return;
+        }
+
+        // Circundar Instrução com try-catch quando existe conexão com o banco de dados
+        try {
+            // Chama a classe conexaoBD para estabelecer a conexão com o JavaDB 
+            conexaoBD bd = new conexaoBD();
+            bd.abrirConexao();
+
+            // Chama o Statement para iniciar instruções, varivável de conexão com o banco con e ResultSet para guardar os dados
+            bd.stmt = bd.con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+
+            // Instrução SQL Select na tabela usuários para a variável "sql" receber o conteúdo e armazenar no ResultSet rs 
+            String sql = "SELECT * FROM USUARIOS";
+            bd.rs = bd.stmt.executeQuery(sql);
+
+            // Estrutura de repetição while para posicionar o ponteiro do ResultSet enquanto existirem dados no rs
+            while (bd.rs.next()) {
+                String email = bd.rs.getString("EMAIL");
+                String senha = bd.rs.getString("SENHA");
+
+                // Array de bytes Base64 para descriptografar as variáveis email e senha do banco de dados 
+                byte[] codemail = Base64.getDecoder().decode(email);
+                String decodemail = new String(codemail);
+                byte[] codsenha = Base64.getDecoder().decode(senha);
+                String decodsenha = new String(codsenha);
+
+                // Condição se para verificar se os dados descriptografados são iguais ao dados digitados pelo usuário (usuário e senha)
+                if (decodemail.equals(tfemail.getText())
+                        && decodsenha.equals(tfsenha.getText())) {
+
+                    // Inicia a tela inicial e fecha a janela de login  
+                    Tela_Inicial obj = new Tela_Inicial();
+                    obj.setVisible(true);
+                    dispose();
+
+                }
+
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
+        }
+
+    }
+
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    private void initComponents() {
+
+        jPanel2 = new javax.swing.JPanel();
+        login1 = new javax.swing.JLabel();
+        txt1 = new javax.swing.JLabel();
+        ajuda = new javax.swing.JButton();
+        tfemail = new javax.swing.JTextField();
+        cadastro = new javax.swing.JButton();
+        txt2 = new javax.swing.JLabel();
+        txt3 = new javax.swing.JLabel();
+        tfsenha = new javax.swing.JPasswordField();
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Remember Why");
+        setResizable(false);
+        setSize(new java.awt.Dimension(640, 380));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        login1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/login1.png"))); // NOI18N
+        getContentPane().add(login1, new org.netbeans.lib.awtextra.AbsoluteConstraints(309, 0, 650, -1));
+
+        txt1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        txt1.setText("Senha master:");
+        getContentPane().add(txt1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, -1, -1));
+
+        ajuda.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        ajuda.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        ajuda.setText("Próximo");
+        ajuda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ajudaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(ajuda, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 370, 190, 30));
+
+        tfemail.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        tfemail.setToolTipText("");
+        tfemail.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                tfemailFocusGained(evt);
+            }
+        });
+        tfemail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfemailActionPerformed(evt);
+            }
+        });
+        getContentPane().add(tfemail, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, 270, 30));
+
+        cadastro.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        cadastro.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        cadastro.setText("Não tem cadastro? ");
+        cadastro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cadastroActionPerformed(evt);
+            }
+        });
+        getContentPane().add(cadastro, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 430, 130, 30));
+
+        txt2.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
+        txt2.setText("Entrar");
+        getContentPane().add(txt2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, -1, -1));
+
+        txt3.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        txt3.setText("Insira o usuário ou e-mail:");
+        getContentPane().add(txt3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, -1, -1));
+
+        tfsenha.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        getContentPane().add(tfsenha, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 290, 270, 30));
+
+        pack();
+        setLocationRelativeTo(null);
+    }// </editor-fold>                        
+
+    private void ajudaActionPerformed(java.awt.event.ActionEvent evt) {                                      
+
+        // Chama o método acessarSistema no botão "Próximo"
+        try {
+            acessarSistema();
+        } catch (SQLException ex) {
+            Logger.getLogger(Login1.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }                                     
+
+    private void tfemailActionPerformed(java.awt.event.ActionEvent evt) {                                        
+
+    }                                       
+
+    private void tfemailFocusGained(java.awt.event.FocusEvent evt) {                                    
+
+    }                                   
+
+    private void cadastroActionPerformed(java.awt.event.ActionEvent evt) {                                         
+
+        // Chama a janela de cadastro ao clicar no botão "Não tem cadastro?"
+        Login2 obj = new Login2();
+        obj.setVisible(true);
+        dispose();
+
+    }                                        
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Login1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Login1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Login1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Login1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Login1().setVisible(true);
+
+            }
+        });
+    }
+
+    // Variables declaration - do not modify                     
+    private javax.swing.JButton ajuda;
+    private javax.swing.JButton cadastro;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel login1;
+    private javax.swing.JTextField tfemail;
+    private javax.swing.JPasswordField tfsenha;
+    private javax.swing.JLabel txt1;
+    private javax.swing.JLabel txt2;
+    private javax.swing.JLabel txt3;
+    // End of variables declaration                   
+
+}
+
+CLASSE Login2.java
+
+package gui;
+
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Base64;
+import javax.swing.JOptionPane;
+
+/**
+ * #Rodrigo de Lima Bispo
+ *
+ * #Login.java
+ */
+public class Login2 extends javax.swing.JFrame {
+
+    public Login2() {
+        initComponents();
+        // Chama o método do banco de dados iniciarBD
+        iniciarBD();
+    }
+
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    private void initComponents() {
+
+        jPanel2 = new javax.swing.JPanel();
+        login1 = new javax.swing.JLabel();
+        txt1 = new javax.swing.JLabel();
+        ajuda = new javax.swing.JButton();
+        tfnome = new javax.swing.JTextField();
+        perdeu = new javax.swing.JButton();
+        txt2 = new javax.swing.JLabel();
+        txt3 = new javax.swing.JLabel();
+        tfsenha = new javax.swing.JPasswordField();
+        tfsobrenome = new javax.swing.JTextField();
+        txt4 = new javax.swing.JLabel();
+        txt6 = new javax.swing.JLabel();
+        tfemail = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Remember Why");
+        setResizable(false);
+        setSize(new java.awt.Dimension(640, 380));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        login1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/login1.png"))); // NOI18N
+        getContentPane().add(login1, new org.netbeans.lib.awtextra.AbsoluteConstraints(309, 0, 650, -1));
+
+        txt1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        txt1.setText("Senha master:");
+        getContentPane().add(txt1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 420, -1, -1));
+
+        ajuda.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        ajuda.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        ajuda.setText("Próximo");
+        ajuda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ajudaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(ajuda, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 550, 190, 30));
+
+        tfnome.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        tfnome.setToolTipText("");
+        tfnome.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                tfnomeFocusGained(evt);
+            }
+        });
+        tfnome.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfnomeActionPerformed(evt);
+            }
+        });
+        getContentPane().add(tfnome, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, 270, 30));
+
+        perdeu.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        perdeu.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        perdeu.setText("Entrar?");
+        perdeu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                perdeuActionPerformed(evt);
+            }
+        });
+        getContentPane().add(perdeu, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 610, 130, 30));
+
+        txt2.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
+        txt2.setText("Crie sua conta");
+        getContentPane().add(txt2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, -1, -1));
+
+        txt3.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        txt3.setText("Sobrenome:");
+        getContentPane().add(txt3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, -1, -1));
+
+        tfsenha.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        getContentPane().add(tfsenha, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 450, 270, 30));
+
+        tfsobrenome.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        tfsobrenome.setToolTipText("");
+        tfsobrenome.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                tfsobrenomeFocusGained(evt);
+            }
+        });
+        tfsobrenome.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfsobrenomeActionPerformed(evt);
+            }
+        });
+        getContentPane().add(tfsobrenome, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 290, 270, 30));
+
+        txt4.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        txt4.setText("Usuário ou e-mail:");
+        getContentPane().add(txt4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 340, -1, -1));
+
+        txt6.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        txt6.setText("Nome:");
+        getContentPane().add(txt6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, -1, -1));
+
+        tfemail.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        getContentPane().add(tfemail, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 370, 270, 30));
+
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel1.setText("A única de que você precisa se lembrar");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 490, -1, -1));
+
+        pack();
+        setLocationRelativeTo(null);
+    }// </editor-fold>                        
+
+    private void ajudaActionPerformed(java.awt.event.ActionEvent evt) {                                      
+
+        // Condição Se para verificar se campo de texto "EMAIL" foi preenchido 
+        if (tfemail.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "O campo 'EMAIL' está vazio!");
+            return;
+        }
+
+        // Condição Se para verificar se campo de texto "NOME ou APP" foi preenchido 
+        if (tfnome.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "O campo 'NOME ou APP' está vazio!");
+            return;
+        }
+
+        // Condição Se para verificar se campo de texto "SOBRENOME" foi preenchido 
+        if (tfsobrenome.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "O campo 'SOBRENOME' está vazio!");
+            return;
+        }
+
+        // Condição Se para verificar se campo de texto "SENHA" foi preenchido 
+        if (tfsenha.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "O campo 'SENHA' está vazio!");
+            return;
+        }
+
+        // Armazenar conteúdo digitado pelo usuário em variáveis String
+        String email = tfemail.getText();
+        String nome = tfnome.getText();
+        String sobrenome = tfsobrenome.getText();
+        String senha = tfsenha.getText();
+
+        // Criptografia Base64 das variáveis do conteúdo digitado gerando novas variáveis do tipo String
+        String codemail = Base64.getEncoder().encodeToString(email.getBytes());
+        String codnome = Base64.getEncoder().encodeToString(nome.getBytes());
+        String codsobrenome = Base64.getEncoder().encodeToString(sobrenome.getBytes());
+        String codsenha = Base64.getEncoder().encodeToString(senha.getBytes());
+
+        // Circundar Instrução com try-catch quando existe conexão com o banco de dados
+        try {
+            // Comando insert na tabela usuarios para inserir os dados criptografados no banco de dados
+            stmt.executeUpdate("insert into ROOT.usuarios values ('" + codemail + "', '" + codnome + "', '" + codsobrenome + "', '" + codsenha + "') ");
+            JOptionPane.showMessageDialog(this, "Sucesso!");
+
+            // Inicia a tela de login e fecha a janela de cadastro  
+            Login1 obj = new Login1();
+            obj.setVisible(true);
+            dispose();
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Nome de usuário já existe!");
+        }
+
+    }                                     
+
+    private void tfnomeActionPerformed(java.awt.event.ActionEvent evt) {                                       
+
+    }                                      
+
+    private void tfnomeFocusGained(java.awt.event.FocusEvent evt) {                                   
+
+    }                                  
+
+    private void perdeuActionPerformed(java.awt.event.ActionEvent evt) {                                       
+
+        // Inicia a tela de login e fecha a janela de cadastro pelo botão "Entrar?"
+        Login1 obj = new Login1();
+        obj.setVisible(true);
+        dispose();
+
+    }                                      
+
+    private void tfsobrenomeFocusGained(java.awt.event.FocusEvent evt) {                                        
+        // TODO add your handling code here:
+    }                                       
+
+    private void tfsobrenomeActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        // TODO add your handling code here:
+    }                                           
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Login2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Login2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Login2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Login2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Login2().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify                     
+    private javax.swing.JButton ajuda;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel login1;
+    private javax.swing.JButton perdeu;
+    private javax.swing.JTextField tfemail;
+    private javax.swing.JTextField tfnome;
+    private javax.swing.JPasswordField tfsenha;
+    private javax.swing.JTextField tfsobrenome;
+    private javax.swing.JLabel txt1;
+    private javax.swing.JLabel txt2;
+    private javax.swing.JLabel txt3;
+    private javax.swing.JLabel txt4;
+    private javax.swing.JLabel txt6;
+    // End of variables declaration                   
+
+    // Declarar variáveis de conexão e Statement para conexão com o banco de dados
+    private java.sql.Connection con;
+    private java.sql.Statement stmt;
+
+    private void iniciarBD() {
+        // Circundar Instrução com try-catch quando existe conexão com o banco de dados
+        try {
+            // Carregar driver da biblioteca "derbyclient.jar"
+            Class.forName("org.apache.derby.jdbc.ClientDriver");
+        } catch (ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(this, "Erro: " + e.getMessage());
+        }
+
+        // Conexão do banco de dados bd na porta 1527
+        String url = "jdbc:derby://localhost:1527/bd";
+        // String com usuário do banco de dados
+        String user = "root";
+        // String com senha do banco de dados
+        String pass = "@Acesso2018";
+
+        // Circundar Instrução com try-catch quando existe conexão com o banco de dados
+        try {
+            // Variável de conexão com recebe dados do banco, usuário, senha e inicia Statement para instruções
+            con = DriverManager.getConnection(url, user, pass);
+            stmt = con.createStatement();
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Erro: " + e.getMessage());
+
+        }
+    }
+}
+
+CLASSE Tela_Inicial.java
+
+package gui;
+
+/**
+ * #Rodrigo de Lima Bispo
+ *
+ * #Login.java
+ */
+public class Tela_Inicial extends javax.swing.JFrame {
+
+    public Tela_Inicial() {
+        initComponents();
+    }
+
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    private void initComponents() {
+
+        jPanel2 = new javax.swing.JPanel();
+        logo = new javax.swing.JLabel();
+        sair = new javax.swing.JButton();
+        menu_superior = new javax.swing.JLabel();
+        ajuda = new javax.swing.JButton();
+        seguranca = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        pagamentos = new javax.swing.JButton();
+        sites_apps = new javax.swing.JButton();
+        menu_lateral = new javax.swing.JLabel();
+        txt1 = new javax.swing.JLabel();
+        txt2 = new javax.swing.JLabel();
+        txt3 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        txt4 = new javax.swing.JLabel();
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Remember Why");
+        setResizable(false);
+        setSize(new java.awt.Dimension(640, 380));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/9.png"))); // NOI18N
+        getContentPane().add(logo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
+
+        sair.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        sair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/10.png"))); // NOI18N
+        sair.setFocusPainted(false);
+        sair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sairActionPerformed(evt);
+            }
+        });
+        getContentPane().add(sair, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 20, 100, 40));
+
+        menu_superior.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/2.png"))); // NOI18N
+        menu_superior.setText("jLabel1");
+        getContentPane().add(menu_superior, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 0, 680, 80));
+
+        ajuda.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        ajuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/7.png"))); // NOI18N
+        ajuda.setFocusPainted(false);
+        ajuda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ajudaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(ajuda, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 620, 190, 40));
+
+        seguranca.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        seguranca.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/6.png"))); // NOI18N
+        seguranca.setFocusPainted(false);
+        seguranca.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                segurancaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(seguranca, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 310, 190, 40));
+
+        jButton1.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/4.png"))); // NOI18N
+        jButton1.setFocusPainted(false);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 250, 190, 40));
+
+        pagamentos.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        pagamentos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/3.png"))); // NOI18N
+        pagamentos.setFocusPainted(false);
+        pagamentos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pagamentosActionPerformed(evt);
+            }
+        });
+        getContentPane().add(pagamentos, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, 190, 40));
+
+        sites_apps.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        sites_apps.setForeground(new java.awt.Color(45, 62, 80));
+        sites_apps.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/5.png"))); // NOI18N
+        sites_apps.setBorder(null);
+        sites_apps.setBorderPainted(false);
+        sites_apps.setFocusPainted(false);
+        sites_apps.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sites_appsActionPerformed(evt);
+            }
+        });
+        getContentPane().add(sites_apps, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 130, 190, 40));
+
+        menu_lateral.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/1.png"))); // NOI18N
+        menu_lateral.setText("Menu Lateral");
+        getContentPane().add(menu_lateral, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 270, -1));
+
+        txt1.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
+        txt1.setText("Tenha acesso a todas as suas senhas");
+        getContentPane().add(txt1, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 400, -1, -1));
+
+        txt2.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        txt2.setText("Cadastre todas as senhas importantes  ");
+        getContentPane().add(txt2, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 430, -1, -1));
+
+        txt3.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        txt3.setText("e tenha acesso a qualquer momento");
+        getContentPane().add(txt3, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 450, -1, -1));
+
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/11.png"))); // NOI18N
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 230, -1, -1));
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        txt4.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        txt4.setText("de forma simples e centralizada.");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(232, Short.MAX_VALUE)
+                .addComponent(txt4)
+                .addGap(223, 223, 223))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(391, Short.MAX_VALUE)
+                .addComponent(txt4)
+                .addGap(230, 230, 230))
+        );
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 80, 680, 640));
+
+        pack();
+        setLocationRelativeTo(null);
+    }// </editor-fold>                        
+
+    private void sites_appsActionPerformed(java.awt.event.ActionEvent evt) {                                           
+
+        // Inicia a tela de Registros e fecha a janela Tela Inicial pelo botão "Registros"
+        Registros obj = new Registros();
+        obj.setVisible(true);
+        dispose();
+
+    }                                          
+
+    private void sairActionPerformed(java.awt.event.ActionEvent evt) {                                     
+
+        // Volta a tela de login pelo botão "Sair"
+        Login1 obj = new Login1();
+        obj.setVisible(true);
+        dispose();
+
+    }                                    
+
+    private void ajudaActionPerformed(java.awt.event.ActionEvent evt) {                                      
+
+        // Inicia a tela de Ajuda e fecha a janela Tela Inicial pelo botão "Ajuda"
+        Ajuda obj = new Ajuda();
+        obj.setVisible(true);
+        dispose();
+
+    }                                     
+
+    private void pagamentosActionPerformed(java.awt.event.ActionEvent evt) {                                           
+
+        // Inicia a tela de Site / Apps e fecha a janela Tela Inicial pelo botão "Site / Apps"
+        SitesApps obj = new SitesApps();
+        obj.setVisible(true);
+        dispose();
+
+    }                                          
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+
+        // Inicia a tela de Bancos e fecha a janela Tela Inicial pelo botão "Bancos"
+        Pagamentos obj = new Pagamentos();
+        obj.setVisible(true);
+        dispose();
+
+    }                                        
+
+    private void segurancaActionPerformed(java.awt.event.ActionEvent evt) {                                          
+
+        // Inicia a tela de Segurança e fecha a janela Tela Inicial pelo botão "Segurança"
+        Segurança obj = new Segurança();
+        obj.setVisible(true);
+        dispose();
+
+    }                                         
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Tela_Inicial.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Tela_Inicial.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Tela_Inicial.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Tela_Inicial.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Tela_Inicial().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify                     
+    private javax.swing.JButton ajuda;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel logo;
+    private javax.swing.JLabel menu_lateral;
+    private javax.swing.JLabel menu_superior;
+    private javax.swing.JButton pagamentos;
+    private javax.swing.JButton sair;
+    private javax.swing.JButton seguranca;
+    private javax.swing.JButton sites_apps;
+    private javax.swing.JLabel txt1;
+    private javax.swing.JLabel txt2;
+    private javax.swing.JLabel txt3;
+    private javax.swing.JLabel txt4;
+    // End of variables declaration                   
+}
+
+CLASSE Registros.java
+
+package gui;
+
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Base64;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
+/**
+ * #Rodrigo de Lima Bispo
+ *
+ * #Login.java
+ */
+public class Registros extends javax.swing.JFrame {
+
+    public Registros() {
+        initComponents();
+        // Chama o método do banco de dados iniciarBD
+        iniciarBD();
+        // Chama o método JTABLE montarTabelaSites
+        montarTabelaSites();
+        // Chama o método JTABLE montarTabelabancos
+        montarTabelaBancos();
+    }
+
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    private void initComponents() {
+
+        jPanel2 = new javax.swing.JPanel();
+        jFrame1 = new javax.swing.JFrame();
+        jInternalFrame1 = new javax.swing.JInternalFrame();
+        logo = new javax.swing.JLabel();
+        sair = new javax.swing.JButton();
+        menu_superior = new javax.swing.JLabel();
+        ajuda = new javax.swing.JButton();
+        seguranca = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        pagamentos = new javax.swing.JButton();
+        sites_apps = new javax.swing.JButton();
+        menu_lateral = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jtbancos = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jtsites = new javax.swing.JTable();
+        jLabel3 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
+        jFrame1.getContentPane().setLayout(jFrame1Layout);
+        jFrame1Layout.setHorizontalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        jFrame1Layout.setVerticalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+
+        jInternalFrame1.setVisible(true);
+
+        javax.swing.GroupLayout jInternalFrame1Layout = new javax.swing.GroupLayout(jInternalFrame1.getContentPane());
+        jInternalFrame1.getContentPane().setLayout(jInternalFrame1Layout);
+        jInternalFrame1Layout.setHorizontalGroup(
+            jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jInternalFrame1Layout.setVerticalGroup(
+            jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Remember Why");
+        setResizable(false);
+        setSize(new java.awt.Dimension(640, 380));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/9.png"))); // NOI18N
+        getContentPane().add(logo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
+
+        sair.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        sair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/10.png"))); // NOI18N
+        sair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sairActionPerformed(evt);
+            }
+        });
+        getContentPane().add(sair, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 20, 100, 40));
+
+        menu_superior.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/2.png"))); // NOI18N
+        menu_superior.setText("jLabel1");
+        getContentPane().add(menu_superior, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 0, 680, 80));
+
+        ajuda.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        ajuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/7.png"))); // NOI18N
+        ajuda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ajudaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(ajuda, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 620, 190, 40));
+
+        seguranca.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        seguranca.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/6.png"))); // NOI18N
+        seguranca.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                segurancaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(seguranca, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 310, 190, 40));
+
+        jButton1.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/5.png"))); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 130, 190, 40));
+
+        pagamentos.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        pagamentos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/4.png"))); // NOI18N
+        pagamentos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pagamentosActionPerformed(evt);
+            }
+        });
+        getContentPane().add(pagamentos, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 250, 190, 40));
+
+        sites_apps.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        sites_apps.setForeground(new java.awt.Color(45, 62, 80));
+        sites_apps.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/3.png"))); // NOI18N
+        sites_apps.setBorder(null);
+        sites_apps.setBorderPainted(false);
+        sites_apps.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sites_appsActionPerformed(evt);
+            }
+        });
+        getContentPane().add(sites_apps, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, 190, 40));
+
+        menu_lateral.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/1.png"))); // NOI18N
+        menu_lateral.setText("Menu Lateral");
+        getContentPane().add(menu_lateral, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 270, -1));
+
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        jLabel1.setText("                                                                 Senhas de Bancos");
+        jLabel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 420, 640, 20));
+
+        jtbancos.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jtbancos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "Título ", "Banco", "Agência", "Conta", "Senha"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jtbancos.setOpaque(false);
+        jScrollPane1.setViewportView(jtbancos);
+
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 440, 640, 250));
+
+        jtsites.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jtsites.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "Título", "Site", "Email", "Senha", "Notas"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jtsites.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jtsites.setOpaque(false);
+        jScrollPane2.setViewportView(jtsites);
+
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 130, 640, 250));
+
+        jLabel3.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        jLabel3.setText("                                                             Senhas de Sites / Apps");
+        jLabel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 110, 640, 20));
+
+        jButton2.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        jButton2.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
+        jButton2.setText("Incluir / Excluir");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 690, -1, -1));
+
+        jButton3.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        jButton3.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
+        jButton3.setText("Cancelar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 690, 100, -1));
+
+        jButton5.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        jButton5.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
+        jButton5.setText("Cancelar");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 380, 100, -1));
+
+        jButton6.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        jButton6.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
+        jButton6.setText("Incluir / Excluir");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 380, 130, -1));
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 680, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 640, Short.MAX_VALUE)
+        );
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 80, 680, 640));
+
+        pack();
+        setLocationRelativeTo(null);
+    }// </editor-fold>                        
+
+    private void sites_appsActionPerformed(java.awt.event.ActionEvent evt) {                                           
+
+        // Inicia a tela de Sites / Apps e fecha a janela Registros pelo botão "Sites / Apps"
+        SitesApps obj = new SitesApps();
+        obj.setVisible(true);
+        dispose();
+
+    }                                          
+
+    private void sairActionPerformed(java.awt.event.ActionEvent evt) {                                     
+
+        // Inicia a tela de Login e fecha a janela Registros pelo botão "Sair"
+        Login1 obj = new Login1();
+        obj.setVisible(true);
+        dispose();
+
+    }                                    
+
+    private void pagamentosActionPerformed(java.awt.event.ActionEvent evt) {                                           
+
+        // Inicia a tela de Bancos e fecha a janela Registros pelo botão "Bancos"
+        Pagamentos obj = new Pagamentos();
+        obj.setVisible(true);
+        dispose();
+
+    }                                          
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+
+        // Inicia a tela de Registros e volta a janela de Registros pelo botão "Registros"
+        Registros obj = new Registros();
+        obj.setVisible(true);
+        dispose();
+
+    }                                        
+
+    private void segurancaActionPerformed(java.awt.event.ActionEvent evt) {                                          
+
+        // Inicia a tela de Segurança e fecha a janela Registros pelo botão "Segurança"
+        Segurança obj = new Segurança();
+        obj.setVisible(true);
+        dispose();
+
+    }                                         
+
+    private void ajudaActionPerformed(java.awt.event.ActionEvent evt) {                                      
+
+        // Inicia a tela de Ajuda e fecha a janela Registros pelo botão "Ajuda"
+        Ajuda obj = new Ajuda();
+        obj.setVisible(true);
+        dispose();
+
+    }                                     
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+
+        // Inicia a Tela Inicial e fecha a janela Registros pelo botão "Cancelar"
+        Tela_Inicial obj = new Tela_Inicial();
+        obj.setVisible(true);
+        dispose();
+
+    }                                        
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+
+        // Inicia a tela Bancos e fecha a janela Registros pelo botão "Incluir / Excluir"
+        Pagamentos obj = new Pagamentos();
+        obj.setVisible(true);
+        dispose();
+
+    }                                        
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+
+        // Inicia a Tela Inicial e fecha a janela Registros pelo botão "Cancelar"
+        Tela_Inicial obj = new Tela_Inicial();
+        obj.setVisible(true);
+        dispose();
+
+    }                                        
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+
+        // Inicia a tela Site / Apps e fecha a janela Registros pelo botão "Incluir / Excluir"
+        SitesApps obj = new SitesApps();
+        obj.setVisible(true);
+        dispose();
+
+    }                                        
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Registros.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Registros.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Registros.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Registros.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Registros().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify                     
+    private javax.swing.JButton ajuda;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JFrame jFrame1;
+    private javax.swing.JInternalFrame jInternalFrame1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jtbancos;
+    private javax.swing.JTable jtsites;
+    private javax.swing.JLabel logo;
+    private javax.swing.JLabel menu_lateral;
+    private javax.swing.JLabel menu_superior;
+    private javax.swing.JButton pagamentos;
+    private javax.swing.JButton sair;
+    private javax.swing.JButton seguranca;
+    private javax.swing.JButton sites_apps;
+    // End of variables declaration                   
+
+    // Declarar variáveis de Conexão, Statement e ResultSet para conexão com o banco de dados e JTABLE
+    private java.sql.Connection con;
+    private java.sql.Statement stmtListarSites;
+    private java.sql.Statement stmtListarPagamentos;
+    private ResultSet rsListarSites;
+    private ResultSet rsListarBancos;
+
+    private void iniciarBD() {
+        // Circundar Instrução com try-catch quando existe conexão com o banco de dados
+        try {
+            // Carregar driver da biblioteca "derbyclient.jar"
+            Class.forName("org.apache.derby.jdbc.ClientDriver");
+        } catch (ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(this, "Erro: " + e.getMessage());
+        }
+
+        // Conexão do banco de dados bd na porta 1527
+        String url = "jdbc:derby://localhost:1527/bd";
+        // String com usuário do banco de dados
+        String user = "root";
+        // String com senha do banco de dados
+        String pass = "@Acesso2018";
+
+        try {
+            // Variável de conexão com recebe dados do banco, usuário, senha e inicia Statement para instruções
+            con = DriverManager.getConnection(url, user, pass);
+
+            // Variáveis de Statement recebe variável de Conexão com propriedades do ResultSet
+            stmtListarSites = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            stmtListarPagamentos = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+
+            // Variáveis ResultSet recebem a instrução select das tabelas siteapps e bancos por meio do Statement
+            rsListarSites = stmtListarSites.executeQuery("select * from ROOT.SITEAPPS");
+            rsListarBancos = stmtListarPagamentos.executeQuery("select * from ROOT.BANCOS");
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Erro: " + e.getMessage());
+
+        }
+
+    }
+
+    private void montarTabelaSites() {
+        try {
+            // Declaração da variável linha do tipo inteiro
+            int linha = 1;
+            // Estrutura de repetição while para posicionar o ponteiro do ResultSet enquanto existirem dados no rs
+            while (rsListarSites.next()) {
+
+                // Recebe da tabela siteapps os dados das colunas e armazena em variáveis do tipo String
+                String titulo = rsListarSites.getString("titulo");
+                String site = rsListarSites.getString("site");
+                String email = rsListarSites.getString("email");
+                String senha = rsListarSites.getString("senha");
+                String notas = rsListarSites.getString("notas");
+
+                // Array de bytes Base64 para descriptografar as variáveis vindas do banco de dados 
+                byte[] codsite = Base64.getDecoder().decode(site);
+                String decodsite = new String(codsite);
+                byte[] codemail = Base64.getDecoder().decode(email);
+                String decodemail = new String(codemail);
+                byte[] codsenha = Base64.getDecoder().decode(senha);
+                String decodsenha = new String(codsenha);
+                byte[] codnotas = Base64.getDecoder().decode(notas);
+                String decodnotas = new String(codnotas);
+
+                // Posicionamento das variáveis descriptografadas na JTABLE Sites / Apps, contador linha e posição da coluna
+                jtsites.getModel().setValueAt(titulo, linha, 0);
+                jtsites.getModel().setValueAt(decodsite, linha, 1);
+                jtsites.getModel().setValueAt(decodemail, linha, 2);
+                jtsites.getModel().setValueAt(decodsenha, linha, 3);
+                jtsites.getModel().setValueAt(decodnotas, linha, 4);
+                // Contador linha + 2 para pular uma linha entre os registros
+                linha = linha + 2;
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
+        }
+    }
+
+    private void montarTabelaBancos() {
+        try {
+            // Declaração da variável linha do tipo inteiro
+            int linha = 1;
+            // Estrutura de repetição while para posicionar o ponteiro do ResultSet enquanto existirem dados no rs
+            while (rsListarBancos.next()) {
+
+                // Recebe da tabela bancos os dados das colunas e armazena em variáveis do tipo String
+                String titulo = rsListarBancos.getString("titulo");
+                String banco = rsListarBancos.getString("banco");
+                String agencia = rsListarBancos.getString("agencia");
+                String conta = rsListarBancos.getString("conta");
+                String senha = rsListarBancos.getString("senha");
+
+                // Array de bytes Base64 para descriptografar as variáveis vindas do banco de dados 
+                byte[] codbanco = Base64.getDecoder().decode(banco);
+                String decodbanco = new String(codbanco);
+                byte[] codagencia = Base64.getDecoder().decode(agencia);
+                String decodagencia = new String(codagencia);
+                byte[] codconta = Base64.getDecoder().decode(conta);
+                String decodconta = new String(codconta);
+                byte[] codsenha = Base64.getDecoder().decode(senha);
+                String decodsenha = new String(codsenha);
+
+                // Posicionamento das variáveis descriptografadas na JTABLE Bancos, contador linha e posição da coluna
+                jtbancos.getModel().setValueAt(titulo, linha, 0);
+                jtbancos.getModel().setValueAt(decodbanco, linha, 1);
+                jtbancos.getModel().setValueAt(decodagencia, linha, 2);
+                jtbancos.getModel().setValueAt(decodconta, linha, 3);
+                jtbancos.getModel().setValueAt(decodsenha, linha, 4);
+                linha = linha + 2;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Registros.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+}
+
+CLASSE SitesApps.java
+
+package gui;
+
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Base64;
+import javax.swing.JOptionPane;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
+
+/**
+ * #Rodrigo de Lima Bispo
+ *
+ * #Login.java
+ */
+public class SitesApps extends javax.swing.JFrame {
+
+    public SitesApps() {
+        initComponents();
+        // Chama o método do banco de dados iniciarBD
+        iniciarBD();
+        // Define a quantidade de caracteres permitidos por campo de texto
+        tftitulo.setDocument(new Letras(45));
+        tfsite.setDocument(new Letras(45));
+        tfemail.setDocument(new Letras(45));
+        tfsenha.setDocument(new Letras(30));
+
+    }
+
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    private void initComponents() {
+
+        jPanel2 = new javax.swing.JPanel();
+        logo = new javax.swing.JLabel();
+        sair = new javax.swing.JButton();
+        menu_superior = new javax.swing.JLabel();
+        ajuda = new javax.swing.JButton();
+        seguranca = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        pagamentos = new javax.swing.JButton();
+        sites_apps = new javax.swing.JButton();
+        menu_lateral = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        tfsite = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        tftitulo = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        tfemail = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tfnotas = new javax.swing.JTextPane();
+        tfsenha = new javax.swing.JPasswordField();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        Atualizar = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
+        jButton9 = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jButton10 = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Remember Why");
+        setResizable(false);
+        setSize(new java.awt.Dimension(640, 380));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/9.png"))); // NOI18N
+        getContentPane().add(logo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
+
+        sair.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        sair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/10.png"))); // NOI18N
+        sair.setFocusPainted(false);
+        sair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sairActionPerformed(evt);
+            }
+        });
+        getContentPane().add(sair, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 20, 100, 40));
+
+        menu_superior.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/2.png"))); // NOI18N
+        menu_superior.setText("jLabel1");
+        getContentPane().add(menu_superior, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 0, 680, 80));
+
+        ajuda.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        ajuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/7.png"))); // NOI18N
+        ajuda.setFocusPainted(false);
+        ajuda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ajudaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(ajuda, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 620, 190, 40));
+
+        seguranca.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        seguranca.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/6.png"))); // NOI18N
+        seguranca.setFocusPainted(false);
+        seguranca.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                segurancaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(seguranca, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 310, 190, 40));
+
+        jButton1.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/4.png"))); // NOI18N
+        jButton1.setFocusPainted(false);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 250, 190, 40));
+
+        pagamentos.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        pagamentos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/3.png"))); // NOI18N
+        pagamentos.setFocusPainted(false);
+        pagamentos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pagamentosActionPerformed(evt);
+            }
+        });
+        getContentPane().add(pagamentos, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, 190, 40));
+
+        sites_apps.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        sites_apps.setForeground(new java.awt.Color(45, 62, 80));
+        sites_apps.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/5.png"))); // NOI18N
+        sites_apps.setBorder(null);
+        sites_apps.setBorderPainted(false);
+        sites_apps.setFocusPainted(false);
+        sites_apps.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sites_appsActionPerformed(evt);
+            }
+        });
+        getContentPane().add(sites_apps, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 130, 190, 40));
+
+        menu_lateral.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/1.png"))); // NOI18N
+        menu_lateral.setText("Menu Lateral");
+        getContentPane().add(menu_lateral, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 270, -1));
+
+        jLabel2.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
+        jLabel2.setText("Sites / Apps");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 100, -1, -1));
+
+        tfsite.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        getContentPane().add(tfsite, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 240, 300, 30));
+
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel3.setText("Senha:");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 300, -1, -1));
+
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 17)); // NOI18N
+        jLabel4.setText("de Sites / Apps");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 650, -1, -1));
+
+        tftitulo.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        tftitulo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tftituloActionPerformed(evt);
+            }
+        });
+        getContentPane().add(tftitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 240, 280, 30));
+
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel5.setText("*");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 300, 20, -1));
+
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel6.setText("Endereço do site ou APP:");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 210, -1, -1));
+
+        jLabel7.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel7.setText("E-mail ou nome de usuário:");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 300, -1, -1));
+
+        tfemail.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        getContentPane().add(tfemail, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 330, 280, 30));
+
+        tfnotas.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jScrollPane1.setViewportView(tfnotas);
+
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 430, 600, 140));
+        getContentPane().add(tfsenha, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 330, 300, 30));
+
+        jButton2.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        jButton2.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jButton2.setText("Incluir / Atualizar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 590, -1, 30));
+
+        jButton3.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        jButton3.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jButton3.setText(">");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 590, 60, 30));
+
+        Atualizar.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        Atualizar.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        Atualizar.setText("Excluir");
+        Atualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AtualizarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(Atualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 590, 100, 30));
+
+        jButton5.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        jButton5.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jButton5.setText("Limpar");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 160, 100, 30));
+
+        jButton4.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        jButton4.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jButton4.setText("Ver tudo");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 160, 100, 30));
+
+        jButton6.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        jButton6.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jButton6.setText("Pesquisar");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 160, 120, 30));
+
+        jButton7.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        jButton7.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jButton7.setText("<");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 590, 60, 30));
+
+        jButton8.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        jButton8.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jButton8.setText("<<");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 590, 60, 30));
+
+        jButton9.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        jButton9.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jButton9.setText(">>");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton9, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 590, 60, 30));
+
+        jLabel8.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel8.setText("Notas:");
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 390, -1, -1));
+
+        jLabel9.setFont(new java.awt.Font("Arial", 0, 17)); // NOI18N
+        jLabel9.setText("Navegue aqui entre as senhas");
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 630, -1, -1));
+
+        jButton10.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        jButton10.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jButton10.setText("Cancelar");
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton10, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 160, -1, 30));
+
+        jLabel10.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel10.setText("Título:");
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 210, -1, -1));
+
+        jLabel11.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel11.setText("*");
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 210, 20, -1));
+
+        jLabel12.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel12.setText("*");
+        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 300, 20, -1));
+
+        jLabel13.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel13.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel13.setText("*");
+        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 210, 20, -1));
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 680, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 640, Short.MAX_VALUE)
+        );
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 80, 680, 640));
+
+        pack();
+        setLocationRelativeTo(null);
+    }// </editor-fold>                        
+
+    private void sites_appsActionPerformed(java.awt.event.ActionEvent evt) {                                           
+
+        // Inicia a tela de Registros e fecha a janela Site / Apps pelo botão "Registros"
+        Registros obj = new Registros();
+        obj.setVisible(true);
+        dispose();
+
+    }                                          
+
+    private void sairActionPerformed(java.awt.event.ActionEvent evt) {                                     
+
+        // Inicia a tela de login e fecha a janela Site / Apps pelo botão "Sair"
+        Login1 obj = new Login1();
+        obj.setVisible(true);
+        dispose();
+
+    }                                    
+
+    private void tftituloActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        // TODO add your handling code here:
+    }                                        
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+
+        // Condição Se para verificar se campo de texto "TÍTULO" foi preenchido 
+        if (tftitulo.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "O campo 'TÍTULO' está vazio!");
+            return;
+        }
+
+        // Condição Se para verificar se campo de texto "SITE" foi preenchido 
+        if (tfsite.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "O campo 'SITE ou APP' está vazio!");
+            return;
+        }
+
+        // Condição Se para verificar se campo de texto "EMAIL" foi preenchido 
+        if (tfemail.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "O campo 'EMAIL' está vazio!");
+            return;
+        }
+
+        // Condição Se para verificar se campo de texto "SENHA" foi preenchido 
+        if (tfsenha.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "O campo 'SENHA' está vazio!");
+            return;
+        }
+
+        // Recebe os dados digitados pelo usuário e armazena em variáveis do tipo String
+        String titulo = tftitulo.getText();
+        String site = tfsite.getText();
+        String email = tfemail.getText();
+        String senha = tfsenha.getText();
+        String notas = tfnotas.getText();
+
+        // Criptografia Base64 das variáveis do conteúdo digitado gerando novas variáveis do tipo String
+        String codsite = Base64.getEncoder().encodeToString(site.getBytes());
+        String codemail = Base64.getEncoder().encodeToString(email.getBytes());
+        String codsenha = Base64.getEncoder().encodeToString(senha.getBytes());
+        String codnotas = Base64.getEncoder().encodeToString(notas.getBytes());
+
+        // Circundar Instrução com try-catch quando existe conexão com o banco de dados
+        try {
+            // Comando insert na tabela siteapps para inserir os dados criptografados no banco de dados
+            stmt.executeUpdate("insert into ROOT.siteapps values ('" + titulo + "', '" + codsite + "', '" + codemail + "', '" + codsenha + "', '" + codnotas + "' ) ");
+            JOptionPane.showMessageDialog(this, "Sucesso!");
+
+            // Define a quantidade de caracteres permitidos por campo de texto
+            tftitulo.setDocument(new Letras(45));
+            tfsite.setDocument(new Letras(45));
+            tfemail.setDocument(new Letras(45));
+            tfsenha.setDocument(new Letras(30));
+            tfnotas.setText("");
+            tftitulo.requestFocus();
+
+            // fecha a tela anterior e abre a janela Site / Apps
+            SitesApps obj = new SitesApps();
+            obj.setVisible(true);
+            dispose();
+
+        } catch (SQLException e) {
+            try {
+                // Comando update na tabela siteapps para alterar os dados criptografados no banco de dados
+                stmt.executeUpdate("update ROOT.siteapps set site =  '" + codsite + "', email =  '" + codemail + "', senha =  '" + codsenha + "', notas =  '" + codnotas + "' where titulo = '" + titulo + "' ");
+                JOptionPane.showMessageDialog(this, "Sucesso!");
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Registro não incluído!");
+            }
+        }
+    }                                        
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+
+        // Chama o método proximo por meio do botão ">"
+        proximo();
+
+    }                                        
+
+    private void pagamentosActionPerformed(java.awt.event.ActionEvent evt) {                                           
+
+        // Inicia a tela de SitesApps e volta a janela de SitesApps pelo botão "Site / Apps"
+        SitesApps obj = new SitesApps();
+        obj.setVisible(true);
+        dispose();
+
+    }                                          
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+
+        // Inicia a tela de Bancos e fecha a janela SitesApps pelo botão "Bancos"
+        Pagamentos obj = new Pagamentos();
+        obj.setVisible(true);
+        dispose();
+
+    }                                        
+
+    private void segurancaActionPerformed(java.awt.event.ActionEvent evt) {                                          
+
+        // Inicia a tela de Segurança e fecha a janela SitesApps pelo botão "Segurança"
+        Segurança obj = new Segurança();
+        obj.setVisible(true);
+        dispose();
+
+    }                                         
+
+    private void ajudaActionPerformed(java.awt.event.ActionEvent evt) {                                      
+
+        // Inicia a tela de Ajuda e fecha a janela SitesApps pelo botão "Ajuda"
+        Ajuda obj = new Ajuda();
+        obj.setVisible(true);
+        dispose();
+
+    }                                     
+
+    private void AtualizarActionPerformed(java.awt.event.ActionEvent evt) {                                          
+
+        // Circundar Instrução com try-catch quando existe conexão com o banco de dados
+        try {
+            // Recebe o título digitado pelo usuário na variável tipo String
+            String titulo = JOptionPane.showInputDialog(this, "Digite o 'TÍTULO' a deletar:");
+
+            // Condição Se para verificar se campo de texto "TÍTULO" foi preenchido 
+            if (titulo.equals("")) {
+                JOptionPane.showMessageDialog(this, "O campo 'TÍTULO' está vazio!");
+                return;
+            }
+
+            // Comando delete na tabela siteapps para deletar o registro de senha correspondente a variável titulo
+            stmt.executeUpdate("delete from ROOT.SITEAPPS where TITULO = ('" + titulo + "') ");
+            JOptionPane.showMessageDialog(this, "Registro deletado ou inexistente!");
+
+            // Define a quantidade de caracteres permitidos por campo de texto
+            tftitulo.setDocument(new Letras(45));
+            tfsite.setDocument(new Letras(45));
+            tfemail.setDocument(new Letras(45));
+            tfsenha.setDocument(new Letras(30));
+            tfnotas.setText("");
+            tftitulo.requestFocus();
+
+            // fecha a tela anterior e abre a janela Site / Apps
+            SitesApps obj = new SitesApps();
+            obj.setVisible(true);
+            dispose();
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Cancelado!");
+        }
+    }                                         
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+
+        // Limpa e define a quantidade de caracteres permitidos por campo de texto
+        tftitulo.setDocument(new Letras(45));
+        tfsite.setDocument(new Letras(45));
+        tfemail.setDocument(new Letras(45));
+        tfsenha.setDocument(new Letras(30));
+        tfnotas.setText("");
+        tftitulo.requestFocus();
+
+    }                                        
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+
+        // Inicia a tela de Registros e fecha a janela SitesApps pelo botão "Ver tudo"
+        Registros obj = new Registros();
+        obj.setVisible(true);
+        dispose();
+
+    }                                        
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+
+        // Circundar Instrução com try-catch quando existe conexão com o banco de dados
+        try {
+            // Recebe o título digitado pelo usuário na variável tipo String
+            String tituloAux = JOptionPane.showInputDialog(this, "Digite o 'TÍTULO' a pesquisar:");
+
+            // Condição Se para verificar se campo de texto "TÍTULO" foi preenchido 
+            if (tituloAux.equals("")) {
+                JOptionPane.showMessageDialog(this, "O campo 'TÍTULO' está vazio!");
+                return;
+            }
+
+            // Resultset rs recebe o resultado da consulta select na tabela siteapps coluna titulo
+            ResultSet rs = stmt.executeQuery("select * from ROOT.SITEAPPS where titulo = ('" + tituloAux + "') ");
+
+            // Estrutura de condição If para posicionar o ponteiro enquanto existirem dados no rs se a condição for verdadeira
+            if (rs.next()) {
+
+                // Recebe da tabela siteapps os dados das colunas e armazena em variáveis do tipo String
+                String site = rs.getString("site");
+                String email = rs.getString("email");
+                String senha = rs.getString("senha");
+                String notas = rs.getString("notas");
+
+                // Array de bytes Base64 para descriptografar as variáveis vindas do banco de dados 
+                byte[] codsite = Base64.getDecoder().decode(site);
+                String decodsite = new String(codsite);
+                byte[] codemail = Base64.getDecoder().decode(email);
+                String decodemail = new String(codemail);
+                byte[] codsenha = Base64.getDecoder().decode(senha);
+                String decodsenha = new String(codsenha);
+                byte[] codnotas = Base64.getDecoder().decode(notas);
+                String decodnotas = new String(codnotas);
+
+                // Posicionamento do titulo e das variáveis descriptografadas nos campos de texto
+                tftitulo.setText(rs.getString("titulo"));
+                tfsite.setText(decodsite);
+                tfemail.setText(decodemail);
+                tfsenha.setText(decodsenha);
+                tfnotas.setText(decodnotas);
+
+                JOptionPane.showMessageDialog(this, "Registro encontrado!");
+            } else {
+                JOptionPane.showMessageDialog(this, "Registro Não encontrado!");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
+        }
+
+    }                                        
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+
+        // Chama o método anterior por meio do botão "<"
+        anterior();
+
+    }                                        
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+
+        // Chama o método primeiro por meio do botão "<<"
+        primeiro();
+
+    }                                        
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+
+        // Chama o método ultimo por meio do botão ">>"
+        ultimo();
+
+    }                                        
+
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {                                          
+        // TODO add your handling code here:
+    }                                         
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(SitesApps.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new SitesApps().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify                     
+    private javax.swing.JButton Atualizar;
+    private javax.swing.JButton ajuda;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel logo;
+    private javax.swing.JLabel menu_lateral;
+    private javax.swing.JLabel menu_superior;
+    private javax.swing.JButton pagamentos;
+    private javax.swing.JButton sair;
+    private javax.swing.JButton seguranca;
+    private javax.swing.JButton sites_apps;
+    private javax.swing.JTextField tfemail;
+    private javax.swing.JTextPane tfnotas;
+    private javax.swing.JPasswordField tfsenha;
+    private javax.swing.JTextField tfsite;
+    private javax.swing.JTextField tftitulo;
+    // End of variables declaration                   
+
+    // Declarar variáveis de Conexão, Statement e ResultSet para conexão com o banco de dados
+    private java.sql.Connection con;
+    private java.sql.Statement stmt;
+    private java.sql.Statement stmtNavegar;
+    private java.sql.ResultSet rsNavegar;
+
+    private void iniciarBD() {
+        // Circundar Instrução com try-catch quando existe conexão com o banco de dados
+        try {
+            // Carregar driver da biblioteca "derbyclient.jar"
+            Class.forName("org.apache.derby.jdbc.ClientDriver");
+        } catch (ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(this, "Erro: " + e.getMessage());
+        }
+
+        // Conexão do banco de dados bd na porta 1527
+        String url = "jdbc:derby://localhost:1527/bd";
+        // String com usuário do banco de dados
+        String user = "root";
+        // String com senha do banco de dados
+        String pass = "@Acesso2018";
+
+        try {
+            // Variável de conexão com recebe dados do banco, usuário, senha e inicia Statement para instruções
+            con = DriverManager.getConnection(url, user, pass);
+            // Variáveis de Statement recebe variável de Conexão com propriedades do ResultSet
+            stmt = con.createStatement();
+            stmtNavegar = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            // Variáveis ResultSet recebem a instrução select das tabelas siteapps e bancos por meio do Statement
+            rsNavegar = stmtNavegar.executeQuery("select * from ROOT.SITEAPPS");
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Erro: " + e.getMessage());
+
+        }
+    }
+
+    class Letras extends PlainDocument {
+
+        // Declaração de variável tamanho do tipo inteiro
+        int tam = 0;
+
+        public Letras(int a) {
+            this.tam = a;
+
+        }
+
+        // Utilização da biblioteca PlainDocument e badLocationException para limitar a quantidade de caracteres nos campos de texto
+        @Override
+        public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
+            int tamanho = (this.getLength() + str.length());
+            if (tamanho <= tam) {
+                super.insertString(offs, str, a);
+            } else {
+                super.insertString(offs, str.replaceAll("[aA0-zZ9]", ""), a);
+            }
+        }
+
+    }
+
+    public void mostrarDados() {
+        try {
+
+            // Recebe da tabela siteapps os dados das colunas e armazena em variáveis do tipo String
+            String site = rsNavegar.getString("site");
+            String email = rsNavegar.getString("email");
+            String senha = rsNavegar.getString("senha");
+            String notas = rsNavegar.getString("notas");
+
+            // Array de bytes Base64 para descriptografar as variáveis vindas do banco de dados
+            byte[] codsite = Base64.getDecoder().decode(site);
+            String decodsite = new String(codsite);
+            byte[] codemail = Base64.getDecoder().decode(email);
+            String decodemail = new String(codemail);
+            byte[] codsenha = Base64.getDecoder().decode(senha);
+            String decodsenha = new String(codsenha);
+            byte[] codnotas = Base64.getDecoder().decode(notas);
+            String decodnotas = new String(codnotas);
+
+            // Posicionamento do titulo e das variáveis descriptografadas nos campos de texto
+            tftitulo.setText(rsNavegar.getString("titulo"));
+            tfsite.setText(decodsite);
+            tfemail.setText(decodemail);
+            tfsenha.setText(decodsenha);
+            tfnotas.setText(decodnotas);
+
+        } catch (SQLException ex) {
+
+        }
+    }
+
+    public void primeiro() {
+
+        // Circundar Instrução com try-catch quando existe conexão com o banco de dados
+        try {
+            // Estrutura de condição If para chamar o método mostrarDados de acordo com o posicionamento do cursor rsNavegar
+            if (rsNavegar.first()) {
+                mostrarDados();
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Nenhum registro encontrado!");
+        }
+
+    }
+
+    public void anterior() {
+
+        // Circundar Instrução com try-catch quando existe conexão com o banco de dados
+        try {
+            // Estrutura de condição If para chamar o método mostrarDados de acordo com o posicionamento do cursor rsNavegar
+            if (!rsNavegar.isFirst()) {
+                rsNavegar.previous();
+            }
+            mostrarDados();
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Nenhum registro encontrado!");
+        }
+
+    }
+
+    public void proximo() {
+
+        // Circundar Instrução com try-catch quando existe conexão com o banco de dados
+        try {
+            // Estrutura de condição If para chamar o método mostrarDados de acordo com o posicionamento do cursor rsNavegar
+            if (!rsNavegar.isLast()) {
+                rsNavegar.next();
+            }
+            mostrarDados();
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Nenhum registro encontrado!");
+        }
+
+    }
+
+    public void ultimo() {
+
+        // Circundar Instrução com try-catch quando existe conexão com o banco de dados
+        try {
+            // Estrutura de condição If para chamar o método mostrarDados de acordo com o posicionamento do cursor rsNavegar
+            if (rsNavegar.last()) {
+                mostrarDados();
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Nenhum registro encontrado!");
+        }
+
+    }
+}
+
+CLASSE Pagamentos.java (Bancos)
+
+package gui;
+
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Base64;
+import javax.swing.JOptionPane;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
+
+/**
+ * #Rodrigo de Lima Bispo
+ *
+ * #Login.java
+ */
+public class Pagamentos extends javax.swing.JFrame {
+
+    public Pagamentos() {
+        initComponents();
+        // Chama o método do banco de dados iniciarBD
+        iniciarBD();
+        // Define a quantidade de caracteres permitidos por campo de texto
+        tftitulo.setDocument(new Letras(60));
+        tfbanco.setDocument(new Letras(16));
+        tfagencia.setDocument(new Numeros(16));
+        tfconta.setDocument(new Numeros(16));
+        tfsenha.setDocument(new Letras(30));
+    }
+
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    private void initComponents() {
+
+        jPanel2 = new javax.swing.JPanel();
+        logo = new javax.swing.JLabel();
+        sair = new javax.swing.JButton();
+        menu_superior = new javax.swing.JLabel();
+        ajuda = new javax.swing.JButton();
+        seguranca = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        pagamentos = new javax.swing.JButton();
+        sites_apps = new javax.swing.JButton();
+        menu_lateral = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        tftitulo = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        tfbanco = new javax.swing.JTextField();
+        tfconta = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        tfagencia = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        Pesquisar = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+        tfsenha = new javax.swing.JPasswordField();
+        jButton7 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
+        jButton9 = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jButton10 = new javax.swing.JButton();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Remember Why");
+        setResizable(false);
+        setSize(new java.awt.Dimension(640, 380));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/9.png"))); // NOI18N
+        logo.setFocusable(false);
+        getContentPane().add(logo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
+
+        sair.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        sair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/10.png"))); // NOI18N
+        sair.setFocusPainted(false);
+        sair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sairActionPerformed(evt);
+            }
+        });
+        getContentPane().add(sair, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 20, 100, 40));
+
+        menu_superior.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/2.png"))); // NOI18N
+        menu_superior.setText("jLabel1");
+        menu_superior.setFocusable(false);
+        getContentPane().add(menu_superior, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 0, 680, 80));
+
+        ajuda.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        ajuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/7.png"))); // NOI18N
+        ajuda.setFocusPainted(false);
+        ajuda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ajudaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(ajuda, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 620, 190, 40));
+
+        seguranca.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        seguranca.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/6.png"))); // NOI18N
+        seguranca.setFocusPainted(false);
+        seguranca.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                segurancaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(seguranca, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 310, 190, 40));
+
+        jButton1.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/4.png"))); // NOI18N
+        jButton1.setFocusPainted(false);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 250, 190, 40));
+
+        pagamentos.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        pagamentos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/3.png"))); // NOI18N
+        pagamentos.setFocusPainted(false);
+        pagamentos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pagamentosActionPerformed(evt);
+            }
+        });
+        getContentPane().add(pagamentos, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, 190, 40));
+
+        sites_apps.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        sites_apps.setForeground(new java.awt.Color(45, 62, 80));
+        sites_apps.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/5.png"))); // NOI18N
+        sites_apps.setBorder(null);
+        sites_apps.setBorderPainted(false);
+        sites_apps.setFocusPainted(false);
+        sites_apps.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sites_appsActionPerformed(evt);
+            }
+        });
+        getContentPane().add(sites_apps, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 130, 190, 40));
+
+        menu_lateral.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/1.png"))); // NOI18N
+        menu_lateral.setText("Menu Lateral");
+        getContentPane().add(menu_lateral, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 270, -1));
+
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
+        jLabel1.setText("Bancos");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 100, 80, 30));
+
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel3.setText("*");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 360, 20, -1));
+
+        jLabel4.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel4.setText("Informações da conta");
+        jLabel4.setRequestFocusEnabled(false);
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 310, -1, -1));
+
+        tftitulo.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        getContentPane().add(tftitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 240, 600, 30));
+
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel6.setText("Conta:");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 360, -1, -1));
+
+        jLabel7.setFont(new java.awt.Font("Arial", 0, 17)); // NOI18N
+        jLabel7.setText("de Bancos");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 580, -1, -1));
+
+        tfbanco.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        getContentPane().add(tfbanco, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 390, 290, 30));
+
+        tfconta.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        tfconta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfcontaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(tfconta, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 390, 140, 30));
+
+        jLabel8.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel8.setText("Agência:");
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 360, -1, -1));
+
+        tfagencia.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        getContentPane().add(tfagencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 390, 130, 30));
+
+        jLabel9.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel9.setText("Senha:");
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 440, -1, -1));
+
+        Pesquisar.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        Pesquisar.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        Pesquisar.setText("Pesquisar");
+        Pesquisar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PesquisarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(Pesquisar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 160, 120, 30));
+
+        jButton3.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        jButton3.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jButton3.setText("Incluir / Atualizar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 520, -1, 30));
+
+        jButton4.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        jButton4.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jButton4.setText("Cancelar");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 160, 110, 30));
+
+        jButton2.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        jButton2.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jButton2.setText(">>");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 520, 60, 30));
+
+        jButton5.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        jButton5.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jButton5.setText("<<");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 520, 60, 30));
+
+        jButton6.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        jButton6.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jButton6.setText("<");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 520, 60, 30));
+
+        tfsenha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfsenhaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(tfsenha, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 470, 310, 30));
+
+        jButton7.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        jButton7.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jButton7.setText(">");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 520, 60, 30));
+
+        jButton8.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        jButton8.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jButton8.setText("Excluir");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 520, 100, 30));
+
+        jButton9.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        jButton9.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jButton9.setText("Ver tudo");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton9, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 160, 100, 30));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 120, -1, -1));
+
+        jLabel10.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel10.setText("Banco:");
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 360, -1, -1));
+
+        jLabel11.setFont(new java.awt.Font("Arial", 0, 17)); // NOI18N
+        jLabel11.setText("Navegue aqui entre as senhas");
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 560, -1, -1));
+
+        jButton10.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        jButton10.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jButton10.setText("Limpar");
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton10, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 160, 100, 30));
+
+        jLabel12.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel12.setText("Título:");
+        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 210, -1, -1));
+
+        jLabel13.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel13.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel13.setText("*");
+        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 210, 20, -1));
+
+        jLabel14.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel14.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel14.setText("*");
+        getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 440, 20, -1));
+
+        jLabel15.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel15.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel15.setText("*");
+        getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 360, 20, -1));
+
+        jLabel16.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel16.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel16.setText("*");
+        getContentPane().add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 360, 20, -1));
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 680, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 640, Short.MAX_VALUE)
+        );
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 80, 680, 640));
+
+        pack();
+        setLocationRelativeTo(null);
+    }// </editor-fold>                        
+
+    private void sites_appsActionPerformed(java.awt.event.ActionEvent evt) {                                           
+
+        // Inicia a tela de Registros e fecha a janela bancos pelo botão "Registros"
+        Registros obj = new Registros();
+        obj.setVisible(true);
+        dispose();
+
+    }                                          
+
+    private void sairActionPerformed(java.awt.event.ActionEvent evt) {                                     
+
+        // Inicia a tela de login e fecha a janela bancos pelo botão "Sair"
+        Login1 obj = new Login1();
+        obj.setVisible(true);
+        dispose();
+
+    }                                    
+
+    private void pagamentosActionPerformed(java.awt.event.ActionEvent evt) {                                           
+
+        // Inicia a tela de SitesApps e fecha a janela bancos pelo botão "Sites / Apps"
+        SitesApps obj = new SitesApps();
+        obj.setVisible(true);
+        dispose();
+
+    }                                          
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+
+        // Inicia a tela de Bancos e volta a janela de Bancos pelo botão "Bancos"
+        Pagamentos obj = new Pagamentos();
+        obj.setVisible(true);
+        dispose();
+
+    }                                        
+
+    private void segurancaActionPerformed(java.awt.event.ActionEvent evt) {                                          
+
+        // Inicia a tela de Segurança e fecha a janela bancos pelo botão "Segurança"
+        Segurança obj = new Segurança();
+        obj.setVisible(true);
+        dispose();
+
+    }                                         
+
+    private void ajudaActionPerformed(java.awt.event.ActionEvent evt) {                                      
+
+        // Inicia a tela de Ajuda e fecha a janela bancos pelo botão "Ajuda"
+        Ajuda obj = new Ajuda();
+        obj.setVisible(true);
+        dispose();
+
+    }                                     
+
+    private void tfcontaActionPerformed(java.awt.event.ActionEvent evt) {                                        
+        // TODO add your handling code here:
+    }                                       
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+
+        // Inicia a tela de Registros e fecha a janela bancos pelo botão "Ver tudo"
+        Registros obj = new Registros();
+        obj.setVisible(true);
+        dispose();
+
+    }                                        
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+
+        // Inicia a tela inicial e fecha a janela bancos pelo botão "Cancelar"
+        Tela_Inicial obj = new Tela_Inicial();
+        obj.setVisible(true);
+        dispose();
+
+    }                                        
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+
+        // Condição Se para verificar se campo de texto "TÍTULO" foi preenchido 
+        if (tftitulo.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "O campo 'TÍTULO' está vazio!");
+            return;
+        }
+
+        // Condição Se para verificar se campo de texto "BANCO" foi preenchido 
+        if (tfbanco.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "O campo 'BANCO' está vazio!");
+            return;
+        }
+
+        // Condição Se para verificar se campo de texto "AGENCIA" foi preenchido 
+        if (tfagencia.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "O campo 'AGENCIA' está vazio!");
+            return;
+        }
+
+        // Condição Se para verificar se campo de texto "CONTA" foi preenchido 
+        if (tfconta.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "O campo 'CONTA' está vazio!");
+            return;
+        }
+
+        // Condição Se para verificar se campo de texto "SENHA" foi preenchido 
+        if (tfsenha.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "O campo 'SENHA' está vazio!");
+            return;
+        }
+
+        // Recebe os dados digitados pelo usuário e armazena em variáveis do tipo String
+        String titulo = tftitulo.getText();
+        String banco = tfbanco.getText();
+        String agencia = tfagencia.getText();
+        String conta = tfconta.getText();
+        String senha = tfsenha.getText();
+
+        // Criptografia Base64 das variáveis do conteúdo digitado gerando novas variáveis do tipo String
+        String codbanco = Base64.getEncoder().encodeToString(banco.getBytes());
+        String codagencia = Base64.getEncoder().encodeToString(agencia.getBytes());
+        String codconta = Base64.getEncoder().encodeToString(conta.getBytes());
+        String codsenha = Base64.getEncoder().encodeToString(senha.getBytes());
+
+        // Circundar Instrução com try-catch quando existe conexão com o banco de dados
+        try {
+            // Comando insert na tabela bancos para inserir os dados criptografados no banco de dados
+            stmt.executeUpdate("insert into ROOT.bancos values ('" + titulo + "', '" + codbanco + "', '" + codagencia + "', '" + codconta + "', '" + codsenha + "' ) ");
+            JOptionPane.showMessageDialog(this, "Sucesso!");
+
+            // Define a quantidade de caracteres permitidos por campo de texto
+            tftitulo.setDocument(new Letras(60));
+            tfbanco.setDocument(new Letras(16));
+            tfagencia.setDocument(new Numeros(16));
+            tfconta.setDocument(new Numeros(16));
+            tfsenha.setDocument(new Letras(30));
+            tftitulo.requestFocus();
+
+            // fecha a tela anterior e abre a janela Bancos
+            Pagamentos obj = new Pagamentos();
+            obj.setVisible(true);
+            dispose();
+
+        } catch (SQLException e) {
+            try {
+                // Comando update na tabela bancos para alterar os dados criptografados no banco de dados
+                stmt.executeUpdate("update ROOT.bancos set banco =  '" + codbanco + "', agencia =  '" + codagencia + "', conta =  '" + codconta + "', senha =  '" + codsenha + "' where titulo = '" + titulo + "' ");
+                JOptionPane.showMessageDialog(this, "Sucesso!");
+            } catch (SQLException ex) {
+                //JOptionPane.showMessageDialog(null, "Registro não incluído!");
+                JOptionPane.showMessageDialog(this, "Erro: " + e.getMessage());
+            }
+        }
+    }                                        
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+
+        // Circundar Instrução com try-catch quando existe conexão com o banco de dados
+        try {
+            // Recebe o título digitado pelo usuário na variável tipo String
+            String titulo = JOptionPane.showInputDialog(this, "Digite o 'TÍTULO' a deletar:");
+
+            // Condição Se para verificar se campo de texto "TÍTULO" foi preenchido 
+            if (titulo.equals("")) {
+                JOptionPane.showMessageDialog(this, "O campo 'TÍTULO' está vazio!");
+                return;
+            }
+
+            // Comando delete na tabela siteapps para deletar o registro de senha correspondente a variável titulo
+            stmt.executeUpdate("delete from ROOT.BANCOS where TITULO = ('" + titulo + "') ");
+            JOptionPane.showMessageDialog(this, "Registro deletado ou inexistente!");
+
+            // Define a quantidade de caracteres permitidos por campo de texto
+            tftitulo.setDocument(new Letras(60));
+            tfbanco.setDocument(new Letras(16));
+            tfagencia.setDocument(new Numeros(16));
+            tfconta.setDocument(new Numeros(16));
+            tfsenha.setDocument(new Letras(30));
+            tftitulo.requestFocus();
+
+            // fecha a tela anterior e abre a janela Pagamentos
+            Pagamentos obj = new Pagamentos();
+            obj.setVisible(true);
+            dispose();
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Erro: " + e.getMessage());
+        }
+    }                                        
+
+    private void PesquisarActionPerformed(java.awt.event.ActionEvent evt) {                                          
+
+        // Circundar Instrução com try-catch quando existe conexão com o banco de dados
+        try {
+            // Recebe o título digitado pelo usuário na variável tipo String
+            String tituloAux = JOptionPane.showInputDialog(this, "Digite o 'TÍTULO' a pesquisar:");
+
+            // Condição Se para verificar se campo de texto "TÍTULO" foi preenchido 
+            if (tituloAux.equals("")) {
+                JOptionPane.showMessageDialog(this, "O campo 'TÍTULO' está vazio!");
+                return;
+            }
+
+            // Resultset rs recebe o resultado da consulta select na tabela bancos coluna titulo
+            ResultSet rs = stmt.executeQuery("select * from ROOT.bancos where titulo = ('" + tituloAux + "') ");
+
+            if (rs.next()) {
+
+                // Recebe da tabela bancos os dados das colunas e armazena em variáveis do tipo String
+                String banco = rs.getString("banco");
+                String agencia = rs.getString("agencia");
+                String conta = rs.getString("conta");
+                String senha = rs.getString("senha");
+
+                // Array de bytes Base64 para descriptografar as variáveis vindas do banco de dados 
+                byte[] codbanco = Base64.getDecoder().decode(banco);
+                String decodbanco = new String(codbanco);
+                byte[] codagencia = Base64.getDecoder().decode(agencia);
+                String decodagencia = new String(codagencia);
+                byte[] codconta = Base64.getDecoder().decode(conta);
+                String decodconta = new String(codconta);
+                byte[] codsenha = Base64.getDecoder().decode(senha);
+                String decodsenha = new String(codsenha);
+
+                // Posicionamento do titulo e das variáveis descriptografadas nos campos de texto
+                tftitulo.setText(rs.getString("titulo"));
+                tfbanco.setText(decodbanco);
+                tfagencia.setText(decodagencia);
+                tfconta.setText(decodconta);
+                tfsenha.setText(decodsenha);
+
+                JOptionPane.showMessageDialog(this, "Registro encontrado!");
+            } else {
+                JOptionPane.showMessageDialog(this, "Registro Não encontrado!");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
+        }
+    }                                         
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+
+        // Chama o método primeiro por meio do botão "<<"
+        primeiro();
+
+    }                                        
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+
+        // Chama o método anterior por meio do botão "<"
+        anterior();
+
+    }                                        
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+
+        // Chama o método proximo por meio do botão ">"
+        proximo();
+
+    }                                        
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+
+        // Chama o método ultimo por meio do botão ">>"
+        ultimo();
+
+    }                                        
+
+    private void tfsenhaActionPerformed(java.awt.event.ActionEvent evt) {                                        
+        // TODO add your handling code here:
+    }                                       
+
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {                                          
+
+        // Limpa e define a quantidade de caracteres permitidos por campo de texto
+        tftitulo.setDocument(new Letras(60));
+        tfbanco.setDocument(new Letras(16));
+        tfagencia.setDocument(new Numeros(16));
+        tfconta.setDocument(new Numeros(16));
+        tfsenha.setDocument(new Letras(30));
+        tftitulo.requestFocus();
+    }                                         
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Pagamentos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Pagamentos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Pagamentos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Pagamentos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Pagamentos().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify                     
+    private javax.swing.JButton Pesquisar;
+    private javax.swing.JButton ajuda;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel logo;
+    private javax.swing.JLabel menu_lateral;
+    private javax.swing.JLabel menu_superior;
+    private javax.swing.JButton pagamentos;
+    private javax.swing.JButton sair;
+    private javax.swing.JButton seguranca;
+    private javax.swing.JButton sites_apps;
+    private javax.swing.JTextField tfagencia;
+    private javax.swing.JTextField tfbanco;
+    private javax.swing.JTextField tfconta;
+    private javax.swing.JPasswordField tfsenha;
+    private javax.swing.JTextField tftitulo;
+    // End of variables declaration                   
+
+    // Declarar variáveis de Conexão, Statement e ResultSet para conexão com o banco de dados
+    private java.sql.Connection con;
+    private java.sql.Statement stmt;
+    private java.sql.Statement stmtNavegar;
+    private java.sql.ResultSet rsNavegar;
+
+    private void iniciarBD() {
+
+        // Circundar Instrução com try-catch quando existe conexão com o banco de dados
+        try {
+            // Carregar driver da biblioteca "derbyclient.jar"
+            Class.forName("org.apache.derby.jdbc.ClientDriver");
+        } catch (ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(this, "Erro: " + e.getMessage());
+        }
+
+        // Conexão do banco de dados bd na porta 1527
+        String url = "jdbc:derby://localhost:1527/bd";
+        // String com usuário do banco de dados
+        String user = "root";
+        // String com senha do banco de dados
+        String pass = "@Acesso2018";
+
+        try {
+            // Variável de conexão com recebe dados do banco, usuário, senha e inicia Statement para instruções
+            con = DriverManager.getConnection(url, user, pass);
+            // Variáveis de Statement recebe variável de Conexão com propriedades do ResultSet
+            stmt = con.createStatement();
+            stmtNavegar = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            // Variáveis ResultSet recebem a instrução select das tabelas siteapps e bancos por meio do Statement
+            rsNavegar = stmtNavegar.executeQuery("select * from ROOT.Bancos");
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Erro: " + e.getMessage());
+
+        }
+    }
+
+    class Letras extends PlainDocument {
+
+        // Declaração de variável tamanho do tipo inteiro
+        int tam = 0;
+
+        public Letras(int a) {
+            this.tam = a;
+
+        }
+
+        // Utilização da biblioteca PlainDocument e badLocationException para limitar a quantidade de caracteres nos campos de texto
+        @Override
+        public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
+            int tamanho = (this.getLength() + str.length());
+            if (tamanho <= tam) {
+                super.insertString(offs, str, a);
+            } else {
+                super.insertString(offs, str.replaceAll("[aA0-zZ9]", ""), a);
+            }
+        }
+
+    }
+
+    class Numeros extends PlainDocument {
+
+        // Declaração de variável tamanho do tipo inteiro
+        int tam = 0;
+
+        public Numeros(int a) {
+            this.tam = a;
+
+        }
+
+        // Utilização da biblioteca PlainDocument e badLocationException para ter somente numeros nos campos de texto
+        @Override
+        public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
+            int tamanho = (this.getLength() + str.length());
+            if (tamanho <= tam) {
+                super.insertString(offs, str.replaceAll("[aA-zZ]", ""), a);
+            } else {
+                super.insertString(offs, str.replaceAll("[aA0-zZ9]", ""), a);
+            }
+        }
+
+    }
+
+    public void mostrarDados() {
+        try {
+
+            // Recebe da tabela siteapps os dados das colunas e armazena em variáveis do tipo String
+            String banco = rsNavegar.getString("banco");
+            String agencia = rsNavegar.getString("agencia");
+            String conta = rsNavegar.getString("conta");
+            String senha = rsNavegar.getString("senha");
+
+            // Array de bytes Base64 para descriptografar as variáveis vindas do banco de dados
+            byte[] codbanco = Base64.getDecoder().decode(banco);
+            String decodbanco = new String(codbanco);
+            byte[] codagencia = Base64.getDecoder().decode(agencia);
+            String decodagencia = new String(codagencia);
+            byte[] codconta = Base64.getDecoder().decode(conta);
+            String decodconta = new String(codconta);
+            byte[] codsenha = Base64.getDecoder().decode(senha);
+            String decodsenha = new String(codsenha);
+
+            // Posicionamento do titulo e das variáveis descriptografadas nos campos de texto
+            tftitulo.setText(rsNavegar.getString("titulo"));
+            tfbanco.setText(decodbanco);
+            tfagencia.setText(decodagencia);
+            tfconta.setText(decodconta);
+            tfsenha.setText(decodsenha);
+
+        } catch (SQLException ex) {
+
+        }
+    }
+
+    public void primeiro() {
+
+        // Circundar Instrução com try-catch quando existe conexão com o banco de dados
+        try {
+            // Estrutura de condição If para chamar o método mostrarDados de acordo com o posicionamento do cursor rsNavegar
+            if (rsNavegar.first()) {
+                mostrarDados();
+            } else {
+
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Nenhum registro encontrado!");
+        }
+
+    }
+
+    public void anterior() {
+
+        // Circundar Instrução com try-catch quando existe conexão com o banco de dados
+        try {
+            // Estrutura de condição If para chamar o método mostrarDados de acordo com o posicionamento do cursor rsNavegar
+            if (!rsNavegar.isFirst()) {
+                rsNavegar.previous();
+            }
+            mostrarDados();
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Nenhum registro encontrado!");
+        }
+
+    }
+
+    public void proximo() {
+
+        // Circundar Instrução com try-catch quando existe conexão com o banco de dados
+        try {
+            // Estrutura de condição If para chamar o método mostrarDados de acordo com o posicionamento do cursor rsNavegar
+            if (!rsNavegar.isLast()) {
+                rsNavegar.next();
+            }
+            mostrarDados();
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Nenhum registro encontrado!");
+        }
+
+    }
+
+    public void ultimo() {
+
+        // Circundar Instrução com try-catch quando existe conexão com o banco de dados
+        try {
+            // Estrutura de condição If para chamar o método mostrarDados de acordo com o posicionamento do cursor rsNavegar
+            if (rsNavegar.last()) {
+                mostrarDados();
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Nenhum registro encontrado!");
+        }
+
+    }
+
+}
+
+CLASSE Seguraça.java
+
+package gui;
+
+/**
+ * #Rodrigo de Lima Bispo
+ *
+ * #Login.java
+ */
+public class Segurança extends javax.swing.JFrame {
+
+    public Segurança() {
+        initComponents();
+    }
+
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    private void initComponents() {
+
+        jPanel2 = new javax.swing.JPanel();
+        logo = new javax.swing.JLabel();
+        sair = new javax.swing.JButton();
+        menu_superior = new javax.swing.JLabel();
+        ajuda = new javax.swing.JButton();
+        seguranca = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        pagamentos = new javax.swing.JButton();
+        sites_apps = new javax.swing.JButton();
+        menu_lateral = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        branco = new javax.swing.JLabel();
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Remember Why");
+        setResizable(false);
+        setSize(new java.awt.Dimension(640, 380));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/9.png"))); // NOI18N
+        getContentPane().add(logo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
+
+        sair.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        sair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/10.png"))); // NOI18N
+        sair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sairActionPerformed(evt);
+            }
+        });
+        getContentPane().add(sair, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 20, 100, 40));
+
+        menu_superior.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/2.png"))); // NOI18N
+        menu_superior.setText("jLabel1");
+        getContentPane().add(menu_superior, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 0, 680, 80));
+
+        ajuda.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        ajuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/7.png"))); // NOI18N
+        ajuda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ajudaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(ajuda, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 620, 190, 40));
+
+        seguranca.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        seguranca.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/6.png"))); // NOI18N
+        seguranca.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                segurancaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(seguranca, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 310, 190, 40));
+
+        jButton1.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/4.png"))); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 250, 190, 40));
+
+        pagamentos.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        pagamentos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/3.png"))); // NOI18N
+        pagamentos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pagamentosActionPerformed(evt);
+            }
+        });
+        getContentPane().add(pagamentos, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, 190, 40));
+
+        sites_apps.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.disabledShadow"));
+        sites_apps.setForeground(new java.awt.Color(45, 62, 80));
+        sites_apps.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/5.png"))); // NOI18N
+        sites_apps.setBorder(null);
+        sites_apps.setBorderPainted(false);
+        sites_apps.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sites_appsActionPerformed(evt);
+            }
+        });
+        getContentPane().add(sites_apps, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 130, 190, 40));
+
+        menu_lateral.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/1.png"))); // NOI18N
+        menu_lateral.setText("Menu Lateral");
+        getContentPane().add(menu_lateral, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 270, -1));
+
+        jLabel3.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
+        jLabel3.setText("Criptografia ");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 390, -1, -1));
+
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        jLabel4.setText("criptografia nas senhas cadastradas.");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 470, -1, -1));
+
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        jLabel5.setText("Para garantir a integridade das senhas e informações");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 430, -1, -1));
+
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        jLabel6.setText("armazenadas no gerenciador, utilizamos");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 450, -1, -1));
+
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/12.png"))); // NOI18N
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 220, -1, -1));
+
+        branco.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/8.JPG"))); // NOI18N
+        getContentPane().add(branco, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 80, 680, -1));
+
+        pack();
+        setLocationRelativeTo(null);
+    }// </editor-fold>                        
+
+    private void sites_appsActionPerformed(java.awt.event.ActionEvent evt) {                                           
+
+        // Inicia a tela de Registros e fecha a janela Segurança pelo botão "Registros"
+        Registros obj = new Registros();
+        obj.setVisible(true);
+        dispose();
+
+    }                                          
+
+    private void sairActionPerformed(java.awt.event.ActionEvent evt) {                                     
+
+        // Inicia a tela de login e fecha a janela Segurança pelo botão "Sair"
+        Login1 obj = new Login1();
+        obj.setVisible(true);
+        dispose();
+
+    }                                    
+
+    private void pagamentosActionPerformed(java.awt.event.ActionEvent evt) {                                           
+
+        // Inicia a tela de SitesApps e fecha a janela Segurança pelo botão "Sites / Apps"
+        SitesApps obj = new SitesApps();
+        obj.setVisible(true);
+        dispose();
+
+    }                                          
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+
+        // Inicia a tela de Bancos e fecha a janela Segurança pelo botão "Bancos"
+        Pagamentos obj = new Pagamentos();
+        obj.setVisible(true);
+        dispose();
+
+    }                                        
+
+    private void segurancaActionPerformed(java.awt.event.ActionEvent evt) {                                          
+
+        // Inicia a tela de Segurança e volta a janela de Segurança pelo botão "Segurança"
+        Segurança obj = new Segurança();
+        obj.setVisible(true);
+        dispose();
+
+    }                                         
+
+    private void ajudaActionPerformed(java.awt.event.ActionEvent evt) {                                      
+
+        // Inicia a tela de Ajuda e fecha a janela Segurança pelo botão "Ajuda"
+        Ajuda obj = new Ajuda();
+        obj.setVisible(true);
+        dispose();
+
+    }                                     
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Segurança.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Segurança.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Segurança.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Segurança.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Segurança().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify                     
+    private javax.swing.JButton ajuda;
+    private javax.swing.JLabel branco;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel logo;
+    private javax.swing.JLabel menu_lateral;
+    private javax.swing.JLabel menu_superior;
+    private javax.swing.JButton pagamentos;
+    private javax.swing.JButton sair;
+    private javax.swing.JButton seguranca;
+    private javax.swing.JButton sites_apps;
+    // End of variables declaration                   
+}
+
+CLASSE ConexaoBD.java
+
+package gui;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ * #Rodrigo de Lima Bispo
+ *
+ * #Login.java
+ */
+public class conexaoBD {
+
+    // Declarar variáveis de Conexão, Statement e ResultSet para conexão com o banco de dados
+    public Connection con;
+    public Statement stmt;
+    public ResultSet rs;
+    public ResultSet rs2;
+
+    // Conexão do banco de dados bd na porta 1527
+    public String url = "jdbc:derby://localhost:1527/bd";
+    // Carregar driver da biblioteca "derbyclient.jar"
+    public String driver = "org.apache.derby.jdbc.ClientDriver";
+    // String com usuário do banco de dados
+    public String user = "root";
+    // String com senha do banco de dados
+    public String password = "@Acesso2018";
+
+    public void abrirConexao() {
+
+        // Circundar Instrução com try-catch quando existe conexão com o banco de dados
+        try {
+            // Carregar driver da biblioteca "derbyclient.jar"
+            Class.forName(driver);
+            try {
+                // Variável de conexão com recebe dados do banco, usuário, senha e inicia Statement para instruções
+                con = DriverManager.getConnection(url, user, password);
+            } catch (SQLException ex) {
+                Logger.getLogger(conexaoBD.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            try {
+                // Variáveis de Statement recebe variável de Conexão com propriedades do ResultSet
+                stmt = con.createStatement();
+            } catch (SQLException ex) {
+                Logger.getLogger(conexaoBD.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (ClassNotFoundException ex) {
+
+        }
+
+    }
+    /**
+     * public static void main(String[] args) throws SQLException,
+     * InstantiationException, IllegalAccessException { conexaoBD bd = new
+     * conexaoBD(); bd.abrirConexao(); }
+    *
+     */
+
+}
